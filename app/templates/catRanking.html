@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/style.css">
+
+
+        {% set data = data%}
+    </head>
+
+    <body>
+        <div class="content">
+            <div class="top-bar">
+                <a href="{{ url_for('main.logout') }}">Log Out</a>
+            </div>
+            <div class="main-content">
+                <div class="title">
+                    <h1 id="rate-my-cat-title">Rate My Cat</h1>
+                </div>
+                <div class="image">
+                    <img id="cat-image" src="{{data[0]['url']}}" alt="nothing here">
+                </div>
+                <div class="button">
+                    <button type="submit" id="refresh-cat">Refresh Cat</button>
+                </div>
+                <div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+
+    <script>
+        async function fetchCatData(){
+            try{
+                const url = '{{ url_for("main.get_cat_image_data") }}';
+                const response = await fetch(url)
+                if(!response.ok){
+                    throw new Error('Could not get cat data: ' + response.statusText)
+                }
+                const data = await response.json()
+                document.getElementById("cat-image").setAttribute("src", data[0]['url'])
+                
+                //console.log(data)
+                //var data_string = '{{ data | tojson }}';
+                
+            }
+            catch{
+                
+            }
+
+        }
+        console.log('{{data}}')
+        document.getElementById("refresh-cat").addEventListener("click", fetchCatData)
+    </script>
+</html>
